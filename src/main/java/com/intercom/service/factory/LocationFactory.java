@@ -10,16 +10,11 @@ import javax.servlet.UnavailableException;
 @Component
 @Slf4j
 public class LocationFactory {
-    public ILocationStrategy getStrategy(String location) {
+    public ILocationStrategy getStrategy(String location) throws UnavailableException {
         if (location.equals("DUBLIN")) {
             return new DublinLocation();
         } else {
-            try {
-                throw new UnavailableException("Location Not Defined");
-            } catch (UnavailableException e) {
-                log.error("Location not defined: " + e);
-            }
+            throw new UnavailableException("Location Not Defined");
         }
-        return null;
     }
 }

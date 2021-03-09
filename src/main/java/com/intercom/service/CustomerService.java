@@ -1,5 +1,7 @@
 package com.intercom.service;
 
+import com.intercom.model.Customer;
+
 import java.util.List;
 
 /**
@@ -9,17 +11,9 @@ public interface CustomerService {
 
     /**
      * Gets the customer within the provided Range and Location
-     *
-     * @param distance Max distance between Intercom office and customers
+     *  @param distance Max distance between Intercom office and customers
      * @param location Intercom Office Location
+     * @return
      */
-    void getCustomersWithinRange(long distance, String location);
-
-    /**
-     * Gets the GPS Co-ordinates
-     *
-     * @param location Intercom Office (Name of the City)
-     * @return The latitude and longitude details of the office
-     */
-    List<Double> getGPScoOrdinates(String location);
+    List<Customer> getCustomersWithinRange(long distance, String location);
 }

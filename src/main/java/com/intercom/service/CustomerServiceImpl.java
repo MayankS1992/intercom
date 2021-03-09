@@ -1,19 +1,14 @@
 package com.intercom.service;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.intercom.model.Customer;
 import com.intercom.service.Writer.IFileWriter;
 import com.intercom.service.factory.LocationFactory;
 import com.intercom.service.strategy.ILocationStrategy;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,22 +17,23 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
-    private static final String CUSTOMER_RESOURCE_FILE_NAME = "customer-info-data.json";
-    private final ObjectMapper objectMapper;
-    private final IFileWriter fileWriter;
+    private final IFileWriter fileIO;
 
     @Autowired
-    public CustomerServiceImpl(ObjectMapper objectMapper, IFileWriter fileWriter) {
-        this.objectMapper = objectMapper;
-        this.fileWriter = fileWriter;
+    public CustomerServiceImpl(IFileWriter fileIO) {
+        this.fileIO = fileIO;
     }
 
+    @SneakyThrows
     @Override
-    public void getCustomersWithinRange(long distance, String location) {
-        List<Double> intercomLocation = getGPScoOrdinates(location);
-        List<Customer> customers = getCustomers();
-        assert customers != null;
-        fileWriter.write(getCustomerBasedOnDistance(intercomLocation, customers, distance));
+    public List<Customer> getCustomersWithinRange(long distance, String location) {
+        LocationFactory factory = new LocationFactory();
+        ILocationStrategy personStrategy = factory.getStrategy(location);
+        List<Double> intercomLocation = personStrategy.getCoOrdinates();
+        List<Customer> customers = fileIO.getCustomers();
+        customers = getCustomerBasedOnDistance(intercomLocation, customers, distance);
+        fileIO.write(customers);
+        return customers;
     }
 
     private List<Customer> getCustomerBasedOnDistance(List<Double> intercomLocation, List<Customer> customers, long radius) {
@@ -76,24 +72,5 @@ public class CustomerServiceImpl implements CustomerService {
         distance = (int) ((meanEarthRadius * Math.acos(a)) + 0.5);
         customer.setDistance(distance);
         return customer;
-    }
-
-    private List<Customer> getCustomers() {
-        log.info("Getting Customers");
-        try {
-            URL url = Resources.getResource(CUSTOMER_RESOURCE_FILE_NAME);
-            JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, Customer.class);
-            return objectMapper.readValue(Resources.toString(url, Charsets.UTF_8), type);
-        } catch (IOException e) {
-            log.error("Failed to read customers entries from file={}", CUSTOMER_RESOURCE_FILE_NAME, e);
-        }
-        return null;
-    }
-
-    @Override
-    public List<Double> getGPScoOrdinates(String location) {
-        LocationFactory factory = new LocationFactory();
-        ILocationStrategy personStrategy = factory.getStrategy(location);
-        return personStrategy.getCoOrdinates();
     }
 }

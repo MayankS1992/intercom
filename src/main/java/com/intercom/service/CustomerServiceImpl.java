@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,13 +27,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @SneakyThrows
     @Override
-    public List<Customer> getCustomersWithinRange(long distance, String location) {
+    public List<Customer> getCustomersWithinRadius(long distance, String location) {
         LocationFactory factory = new LocationFactory();
         ILocationStrategy personStrategy = factory.getStrategy(location);
         List<Double> intercomLocation = personStrategy.getCoOrdinates();
         List<Customer> customers = fileIO.getCustomers();
         customers = getCustomerBasedOnDistance(intercomLocation, customers, distance);
-        fileIO.write(customers);
+        if(!customers.isEmpty()){
+            log.debug("Creating Customer records");
+            customers.sort(Comparator.comparing(Customer::getUser_id));
+            fileIO.write(customers);
+        }
         return customers;
     }
 

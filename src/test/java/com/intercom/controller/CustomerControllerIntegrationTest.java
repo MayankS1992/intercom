@@ -41,11 +41,11 @@ class CustomerControllerIntegrationTest {
     @Test
     void getCustomerWithinRange() {
         try {
-            when(service.getCustomersWithinRange(100,"DUBLIN")).thenReturn(new ArrayList<Customer>());
+            when(service.getCustomersWithinRadius(100,"DUBLIN")).thenReturn(new ArrayList<Customer>());
             mockMvc
                     .perform(get("/distance/100/DUBLIN")
                             .contentType("application/json"))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         }

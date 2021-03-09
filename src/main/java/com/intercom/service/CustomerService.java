@@ -11,9 +11,10 @@ public interface CustomerService {
 
     /**
      * Gets the customer within the provided Range and Location
-     *  @param distance Max distance between Intercom office and customers
+     *
+     * @param distance Max distance between Intercom office and customers
      * @param location Intercom Office Location
      * @return
      */
-    List<Customer> getCustomersWithinRange(long distance, String location);
+    List<Customer> getCustomersWithinRadius(long distance, String location);
 }

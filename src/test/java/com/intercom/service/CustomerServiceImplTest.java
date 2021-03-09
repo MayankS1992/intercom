@@ -6,13 +6,10 @@ import com.intercom.service.Writer.FileWriter;
 import com.intercom.service.Writer.IFileWriter;
 import com.intercom.service.factory.LocationFactory;
 import com.intercom.service.strategy.ILocationStrategy;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +25,6 @@ import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -64,7 +60,7 @@ class CustomerServiceImplTest {
         List<Customer> expectedCustomers = customers;
         customers.add(customer);
         Mockito.when(fileWriter.getCustomers()).thenReturn(customers);
-        customers = this.customerService.getCustomersWithinRange(100, "DUBLIN");
+        customers = this.customerService.getCustomersWithinRadius(100, "DUBLIN");
         MatcherAssert.assertThat(customers, equalTo(expectedCustomers));
     }
 

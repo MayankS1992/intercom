@@ -16,6 +16,11 @@ office. The program then outputs the customers in an output file in the root loc
 	B. Go into the project root folder and run the below command in command Line to start the server:
         java -jar target/intercom-0.0.1-SNAPSHOT.jar
 
+## You can execute tests in the command prompt by specifying the goal test when running Maven, for example:
+      mvn test
+      mvn clean test
+      mvn clean compile test
+
 ## Rest Endpoints
 
 	1. Gets the customer ids and names within the provided Radius from an Intercom Office.
@@ -29,4 +34,5 @@ office. The program then outputs the customers in an output file in the root loc
 Once the server is started
 http://localhost:63342/intercom/target/site/jacoco/index.html#dn-c
 
-![img.png](img.png)
+![img_1.png](img_1.png)
+

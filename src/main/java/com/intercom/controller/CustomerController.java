@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 import java.net.URI;
 import java.util.List;
 
@@ -32,13 +31,18 @@ public class CustomerController {
     }
 
     @RequestMapping(value = {"/distance/{distance}/{location}"}, method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCustomerWithinRange(@PathVariable("distance") @Valid long distance,
-                                                    @PathVariable("location") @Valid String location) {
+    public ResponseEntity<String> getCustomerWithinRange(@PathVariable("distance") @Valid long distance,
+                                                         @PathVariable("location") @Valid String location) {
         log.debug("Get Request: " + distance);
         List<Customer> customers = customerService.getCustomersWithinRadius(distance, location);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(URI.create(location));
-        responseHeaders.set("size", String.valueOf(customers.size()));
-        return new ResponseEntity<>("CREATED", responseHeaders, HttpStatus.CREATED);
+        if (!customers.isEmpty()) {
+            responseHeaders.set("size", String.valueOf(customers.size()));
+            return new ResponseEntity<>("CREATED", responseHeaders, HttpStatus.CREATED);
+        }
+        ;
+        responseHeaders.set("size", String.valueOf(0));
+        return new ResponseEntity<>("EMPTY", responseHeaders, HttpStatus.NO_CONTENT);
     }
 }

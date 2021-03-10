@@ -2,9 +2,9 @@ package com.intercom.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intercom.model.Customer;
-import com.intercom.service.Writer.FileWriter;
-import com.intercom.service.Writer.IFileWriter;
 import com.intercom.service.factory.LocationFactory;
+import com.intercom.service.files.Files;
+import com.intercom.service.files.IFiles;
 import com.intercom.service.strategy.ILocationStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.MatcherAssert;
@@ -36,7 +36,7 @@ class CustomerServiceImplTest {
     @Mock
     private ObjectMapper objectMapper = new ObjectMapper();
     @Mock
-    private IFileWriter fileWriter;
+    private IFiles fileWriter;
     @Mock
     private ILocationStrategy locationStrategy;
     @InjectMocks
@@ -44,8 +44,8 @@ class CustomerServiceImplTest {
 
     @BeforeEach
     void init() {
-        this.fileWriter = new FileWriter(objectMapper);
-        this.fileWriter = mock(FileWriter.class);
+        this.fileWriter = new Files(objectMapper);
+        this.fileWriter = mock(Files.class);
         this.customerService = new CustomerServiceImpl(fileWriter);
     }
 

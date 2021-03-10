@@ -1,4 +1,4 @@
-package com.intercom.service.Writer;
+package com.intercom.service.files;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,13 +18,13 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class FileWriter implements IFileWriter {
+public class Files implements IFiles {
 
     private static final String CUSTOMER_RESOURCE_FILE_NAME = "customer-info-data.json";
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public FileWriter(ObjectMapper objectMapper) {
+    public Files(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

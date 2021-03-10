@@ -1,8 +1,8 @@
 package com.intercom.service;
 
 import com.intercom.model.Customer;
-import com.intercom.service.Writer.IFileWriter;
 import com.intercom.service.factory.LocationFactory;
+import com.intercom.service.files.IFiles;
 import com.intercom.service.strategy.ILocationStrategy;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
-    private final IFileWriter fileIO;
+    private final IFiles fileIO;
 
     @Autowired
-    public CustomerServiceImpl(IFileWriter fileIO) {
+    public CustomerServiceImpl(IFiles fileIO) {
         this.fileIO = fileIO;
     }
 
@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Double> intercomLocation = personStrategy.getCoOrdinates();
         List<Customer> customers = fileIO.getCustomers();
         customers = getCustomerBasedOnDistance(intercomLocation, customers, distance);
-        if(!customers.isEmpty()){
+        if (!customers.isEmpty()) {
             log.debug("Creating Customer records");
             customers.sort(Comparator.comparing(Customer::getUser_id));
             fileIO.write(customers);

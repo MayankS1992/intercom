@@ -4,9 +4,9 @@ The application checks the customer records and invites any customer within the 
 office. The program then outputs the customers in an output file in the root location:
 
 1. Added Features
-    1. Code Coverage Checkers
-    2. REST Functionalities (GET)
-    3. Unit Test & Integration Test
+    1. Code Coverage Checkers (JaCoco used; Current coverage: 71%)
+    2. REST Functionalities (GET) - Retrieve the customer details in a given radius of the intercom office
+    3. Unit Test & Integration Test 
 
 ## Installation guide:
 
